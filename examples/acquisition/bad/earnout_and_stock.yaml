@@ -1,0 +1,45 @@
+schema_version: "1.0"
+id: acme-acquired-earnout-stock
+title: Will Acme be acquired for >= $100M (earn-out & stock unspecified)?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: acquisition_valuation
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "100000000"
+      currency: USD
+  class_policy:
+    class: acquisition
+    completion_event: legal_close
+    valuation_basis: enterprise_value
+    consideration_types: null
+    earn_out_treatment: null
+    transaction_structures: null
+    termination_after_announcement_policy: resolves_no_if_terminated_before_close
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+evidence_policy:
+  primary_source:
+    name: SEC Form 8-K
+    source_type: sec_or_regulatory_filing
+    independent_of_subject: true
+    verification_method: EDGAR filing
+  conflict_policy: use_highest_precedence_source
+  precedence_order:
+    - sec_or_regulatory_filing
+revision_policy:
+  restatement_handling: apply_restatements_within_window
+  restatement_window_days: 30
+invalidation_policy:
+  cancellation_policy: resolve_no

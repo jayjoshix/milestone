@@ -1,0 +1,75 @@
+schema_version: "1.0"
+id: acme-raise-cash-primary-equity
+title: Will Acme close and receive >= $5M in primary priced equity by Dec 31, 2027?
+subject:
+  name: Acme Corp
+  type: company
+  jurisdiction: US
+  entity_scope: parent_entity_only
+  identifiers:
+    domain: acme.example
+    sec_cik: "0001999999"
+predicate:
+  metric: fundraising_total
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "5000000"
+      currency: USD
+  class_policy:
+    class: fundraising
+    completion_event: legal_close_and_funds_received
+    allowed_instruments:
+      - priced_equity
+    include_secondary: false
+    include_insider_capital: false
+    include_existing_note_conversion: false
+    tranche_policy: count_only_funded_tranches
+    conditional_commitment_policy: exclude_conditional
+    unwind_policy: must_remain_closed_through_finalization
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: Escrow Bank Wire Ledger
+    source_type: bank_or_escrow_confirmation
+    independent_of_subject: true
+    verification_method: Signed bank escrow confirmation of cleared funds
+  fallback_sources:
+    - name: SEC Form D
+      source_type: sec_or_regulatory_filing
+      independent_of_subject: true
+      verification_method: EDGAR Form D total amount sold
+  precedence_order:
+    - bank_or_escrow_confirmation
+    - sec_or_regulatory_filing
+    - cap_table_registry
+    - company_attestation
+    - press_release
+    - third_party_media
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-15T23:59:59Z"
+  restatement_window_days: 15
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: At least $5,000,000 USD of primary priced equity legally closed and cleared in bank escrow by 2027-12-31T23:59:59Z.
+  no_condition_summary: Cleared primary priced equity proceeds remain below $5,000,000 USD through deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+    - fraud_or_material_misrepresentation
+  cancellation_policy: resolve_no

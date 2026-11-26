@@ -1,0 +1,42 @@
+schema_version: "1.0"
+id: alice-youtube-contradictory
+title: Will Alice reach 1M YouTube subs (contradictory crossing rule)?
+subject:
+  name: Alice
+  type: channel
+  identifiers:
+    youtube_channel_id: UC_ALICE_EXAMPLE_01
+predicate:
+  metric: audience_count
+  comparator: ">="
+  threshold:
+    kind: count
+    value: 1000000
+  class_policy:
+    class: audience
+    platform: youtube
+    channel_scope: single_named_channel_id
+    crossing_rule: momentary_crossing
+    count_source_mode: official_api_exact_or_public_tier
+    bot_purge_policy: raw_snapshot_at_observation
+    deleted_or_suspended_channel_policy: resolves_invalid
+    migrated_channel_policy: only_original_channel_id
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: point_in_time_at_deadline
+evidence_policy:
+  primary_source:
+    name: YouTube Data API v3
+    source_type: official_platform_api
+    independent_of_subject: true
+    verification_method: channels.list statistics.subscriberCount
+  conflict_policy: use_highest_precedence_source
+  precedence_order:
+    - official_platform_api
+revision_policy:
+  corrections_until: "2028-01-03T23:59:59Z"
+  restatement_handling: apply_restatements_within_window
+invalidation_policy:
+  cancellation_policy: resolve_invalid

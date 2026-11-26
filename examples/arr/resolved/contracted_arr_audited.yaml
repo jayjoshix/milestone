@@ -1,0 +1,73 @@
+schema_version: "1.0"
+id: acme-arr-contracted-audited
+title: Will Acme reach $1M contracted recurring ARR (audited, ex-services) by June 30, 2027?
+subject:
+  name: Acme Corp
+  type: company
+  jurisdiction: US
+  entity_scope: consolidated_group_with_subsidiaries
+  identifiers:
+    domain: acme.example
+    delaware_file_number: "7482910"
+predicate:
+  metric: annual_recurring_revenue
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "1000000"
+      currency: USD
+  class_policy:
+    class: arr
+    measurement_basis: contracted_recurring_revenue
+    include_services_revenue: false
+    include_one_time_fees: false
+    usage_based_treatment: excluded
+    discount_treatment: net_of_discounts
+    churn_treatment: exclude_churned_and_noticed
+    signed_not_started_treatment: exclude_until_start_date
+    subsidiary_scope: consolidated_group_with_subsidiaries
+observation:
+  start: "2026-01-01T00:00:00Z"
+  deadline: "2027-06-30T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: point_in_time_at_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: Independent CPA ARR Audit Report
+    source_type: audited_financials
+    independent_of_subject: true
+    verification_method: Signed CPA attestation under AICPA standards
+  fallback_sources:
+    - name: SEC Regulatory Filing
+      source_type: sec_or_regulatory_filing
+      independent_of_subject: true
+      verification_method: EDGAR filing check
+  precedence_order:
+    - audited_financials
+    - sec_or_regulatory_filing
+    - company_attestation
+    - press_release
+    - third_party_media
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2027-07-30T23:59:59Z"
+  restatement_window_days: 30
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: Audited contracted recurring software ARR net of discounts and churn is >= $1,000,000 USD on 2027-06-30T23:59:59Z.
+  no_condition_summary: Audited contracted recurring software ARR is < $1,000,000 USD on deadline or company dissolved prior to deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+    - fraud_or_material_misrepresentation
+  cancellation_policy: resolve_no

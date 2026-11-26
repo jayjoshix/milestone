@@ -1,0 +1,58 @@
+schema_version: "1.0"
+id: alice-join-openai-payroll
+title: Will Alice appear on OpenAI full-time payroll before Dec 31, 2027?
+subject:
+  name: Alice Example
+  type: person
+  identifiers:
+    linkedin: https://linkedin.com/in/alice-example
+predicate:
+  metric: employment_status
+  comparator: achieved
+  threshold:
+    kind: boolean
+    value: true
+  class_policy:
+    class: employment
+    target_employer: OpenAI
+    target_employer_scope: named_parent_entity_only
+    qualifying_event: first_payroll_cycle
+    allowed_relationships:
+      - full_time_employee
+    acquisition_treatment: counts_as_joining
+    leave_of_absence_treatment: counts_if_active_on_roster
+    announced_never_started_policy: does_not_resolve_yes_without_actual_start
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: exclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+evidence_policy:
+  primary_source:
+    name: Official Employer Payroll Confirmation
+    source_type: sec_or_regulatory_filing
+    independent_of_subject: true
+    verification_method: Payroll administrator attestation
+  fallback_sources:
+    - name: Company Press Release
+      source_type: press_release
+      independent_of_subject: true
+      verification_method: Official press announcement
+  precedence_order:
+    - sec_or_regulatory_filing
+    - press_release
+  conflict_policy: use_highest_precedence_source
+  availability_policy: return_unresolved_if_unavailable
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-31T23:59:59Z"
+  restatement_window_days: 31
+  restatement_handling: apply_restatements_within_window
+invalidation_policy:
+  yes_condition_summary: Alice completes first payroll cycle as FTE at OpenAI parent entity strictly before 2027-12-31T23:59:59Z.
+  no_condition_summary: No qualifying payroll cycle completed prior to deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no

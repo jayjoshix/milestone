@@ -1,0 +1,41 @@
+schema_version: "1.0"
+id: alice-join-openai-self-announced
+title: Will Alice join OpenAI (verified solely by Alice's blog)?
+subject:
+  name: Alice
+  type: person
+  identifiers:
+    github: alice-dev
+predicate:
+  metric: employment_status
+  comparator: achieved
+  threshold:
+    kind: boolean
+    value: true
+  class_policy:
+    class: employment
+    target_employer: OpenAI
+    target_employer_scope: named_entity_and_wholly_owned_subsidiaries
+    qualifying_event: official_start_date
+    allowed_relationships:
+      - full_time_employee
+    acquisition_treatment: does_not_count_unless_new_employment_agreement
+    leave_of_absence_treatment: requires_active_working_day
+    announced_never_started_policy: does_not_resolve_yes_without_actual_start
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+evidence_policy:
+  primary_source:
+    name: Subject Personal Announcement
+    source_type: company_attestation
+    independent_of_subject: false
+    verification_method: Personal blog post
+  conflict_policy: unresolved_on_conflict
+revision_policy:
+  corrections_until: "2028-01-14T23:59:59Z"
+  restatement_handling: apply_restatements_within_window
+invalidation_policy:
+  cancellation_policy: resolve_no

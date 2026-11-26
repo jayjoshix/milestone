@@ -1,0 +1,45 @@
+schema_version: "1.0"
+id: acme-arr-usage-signed
+title: Will Acme reach $2M ARR including usage and signed deals by Q4 2027?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: annual_recurring_revenue
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "2000000"
+      currency: USD
+  class_policy:
+    class: arr
+    measurement_basis: contracted_recurring_revenue
+    include_services_revenue: false
+    include_one_time_fees: null
+    usage_based_treatment: null
+    discount_treatment: null
+    churn_treatment: null
+    signed_not_started_treatment: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: point_in_time_at_deadline
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+evidence_policy:
+  primary_source:
+    name: Audited Financial Statements
+    source_type: audited_financials
+    independent_of_subject: true
+    verification_method: Independent CPA audit
+  conflict_policy: use_highest_precedence_source
+  precedence_order:
+    - audited_financials
+revision_policy:
+  restatement_handling: ignore_post_deadline_restatements
+invalidation_policy:
+  cancellation_policy: resolve_no

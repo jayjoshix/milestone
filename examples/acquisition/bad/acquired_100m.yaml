@@ -1,0 +1,35 @@
+schema_version: "1.0"
+id: acme-acquired-100m-basic
+title: Will Acme be acquired for at least $100M before December 31, 2027?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: acquisition_valuation
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "100000000"
+      currency: USD
+  class_policy:
+    class: acquisition
+    completion_event: null
+    valuation_basis: null
+    consideration_types: null
+    earn_out_treatment: null
+    transaction_structures: null
+    termination_after_announcement_policy: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: null
+  deadline_inclusivity: null
+  observation_mode: null
+currency_policy: null
+evidence_policy:
+  primary_source: null
+  conflict_policy: null
+revision_policy:
+  restatement_handling: null
+invalidation_policy:
+  cancellation_policy: null

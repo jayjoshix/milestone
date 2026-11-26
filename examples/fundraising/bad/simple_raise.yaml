@@ -1,0 +1,39 @@
+schema_version: "1.0"
+id: acme-raise-simple
+title: Will Acme raise $5M before December 31, 2027?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: fundraising_total
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "5000000"
+      currency: USD
+  class_policy:
+    class: fundraising
+    completion_event: null
+    allowed_instruments: null
+    include_secondary: null
+    include_insider_capital: null
+    include_existing_note_conversion: null
+    tranche_policy: null
+    conditional_commitment_policy: null
+    unwind_policy: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: null
+  deadline_inclusivity: null
+  observation_mode: null
+currency_policy: null
+evidence_policy:
+  primary_source: null
+  fallback_sources: []
+  precedence_order: []
+  conflict_policy: null
+revision_policy:
+  restatement_handling: null
+invalidation_policy:
+  cancellation_policy: null

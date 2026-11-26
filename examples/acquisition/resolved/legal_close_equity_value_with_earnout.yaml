@@ -1,0 +1,71 @@
+schema_version: "1.0"
+id: acme-acquired-equity-earnout
+title: Will Acme close a majority/full acquisition at >= $100M equity value (fair-value earn-out) by Dec 31, 2027?
+subject:
+  name: Acme Corp
+  type: company
+  jurisdiction: US
+  entity_scope: consolidated_group_with_subsidiaries
+  identifiers:
+    domain: acme.example
+predicate:
+  metric: acquisition_valuation
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "100000000"
+      currency: USD
+  class_policy:
+    class: acquisition
+    completion_event: regulatory_clearance_and_close
+    valuation_basis: equity_value
+    consideration_types:
+      - cash
+      - public_stock
+      - private_stock
+    earn_out_treatment: include_fair_value_at_close
+    transaction_structures:
+      - whole_company_merger_or_acquisition
+      - majority_equity_stake
+    termination_after_announcement_policy: resolves_no_if_terminated_before_close
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: bloomberg_fixing
+  fx_timestamp_rule: transaction_date_spot
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: Audited Deal Closing Statement
+    source_type: audited_financials
+    independent_of_subject: true
+    verification_method: Big-4 purchase price allocation schedule
+  fallback_sources:
+    - name: Regulatory Filing
+      source_type: sec_or_regulatory_filing
+      independent_of_subject: true
+      verification_method: Public merger proxy or 8-K
+  precedence_order:
+    - audited_financials
+    - sec_or_regulatory_filing
+    - press_release
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-02-15T23:59:59Z"
+  restatement_window_days: 46
+  restatement_handling: apply_restatements_within_window
+invalidation_policy:
+  yes_condition_summary: Regulatory clearance and closing at >= $100M USD equity value including closing fair value of earn-outs.
+  no_condition_summary: No qualifying closing >= $100M USD by deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no

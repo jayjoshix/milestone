@@ -1,0 +1,44 @@
+schema_version: "1.0"
+id: acme-raise-safe-debt
+title: Will Acme raise $5M (SAFE or debt?) by December 31, 2027?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: fundraising_total
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "5000000"
+      currency: USD
+  class_policy:
+    class: fundraising
+    completion_event: definitive_agreement_signed
+    allowed_instruments: null
+    include_secondary: true
+    include_insider_capital: null
+    include_existing_note_conversion: null
+    tranche_policy: null
+    conditional_commitment_policy: null
+    unwind_policy: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+evidence_policy:
+  primary_source:
+    name: Cap Table Registry
+    source_type: cap_table_registry
+    independent_of_subject: true
+    verification_method: Carta export
+  conflict_policy: unresolved_on_conflict
+revision_policy:
+  restatement_handling: ignore_post_deadline_restatements
+invalidation_policy:
+  cancellation_policy: resolve_no

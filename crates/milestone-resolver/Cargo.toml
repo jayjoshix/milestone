@@ -1,0 +1,10 @@
+[package]
+name = "milestone-resolver"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+milestone-core = { path = "../milestone-core" }
+rust_decimal.workspace = true

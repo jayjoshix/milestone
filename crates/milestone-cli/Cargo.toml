@@ -1,0 +1,20 @@
+[package]
+name = "milestone-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "milestone"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+milestone-adversarial = { path = "../milestone-adversarial" }
+milestone-core = { path = "../milestone-core" }
+milestone-lint = { path = "../milestone-lint" }
+milestone-parser = { path = "../milestone-parser" }
+milestone-resolver = { path = "../milestone-resolver" }
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true

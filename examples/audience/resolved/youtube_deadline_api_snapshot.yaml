@@ -1,0 +1,60 @@
+schema_version: "1.0"
+id: alice-youtube-deadline-snapshot
+title: Will channel UC_ALICE_EXAMPLE_01 have >= 1,000,000 YouTube subscribers at 2027-12-31T23:59:59Z?
+subject:
+  name: Alice Channel
+  type: channel
+  identifiers:
+    youtube_channel_id: UC_ALICE_EXAMPLE_01
+predicate:
+  metric: audience_count
+  comparator: ">="
+  threshold:
+    kind: count
+    value: 1000000
+  class_policy:
+    class: audience
+    platform: youtube
+    channel_scope: single_named_channel_id
+    crossing_rule: deadline_timestamp_snapshot
+    count_source_mode: official_api_exact_or_public_tier
+    bot_purge_policy: net_after_platform_adjustments_until_finalization
+    deleted_or_suspended_channel_policy: resolves_no
+    migrated_channel_policy: only_original_channel_id
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: point_in_time_at_deadline
+  cutoff_precision: exact_second_utc
+evidence_policy:
+  primary_source:
+    name: YouTube Data API v3
+    source_type: official_platform_api
+    independent_of_subject: true
+    verification_method: Official channels.list subscriberCount at 2027-12-31T23:59:59Z
+  fallback_sources:
+    - name: Archived Public Channel Page
+      source_type: public_web_page
+      independent_of_subject: true
+      verification_method: Signed TLS notary capture of channel page
+  precedence_order:
+    - official_platform_api
+    - public_web_page
+    - third_party_media
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-07T23:59:59Z"
+  restatement_window_days: 7
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: Official YouTube Data API reports >= 1,000,000 subscribers for UC_ALICE_EXAMPLE_01 at deadline after 7-day bot-purge window.
+  no_condition_summary: Subscriber count < 1,000,000 at deadline or channel deleted prior to deadline.
+  invalid_triggers:
+    - platform_discontinued_metric
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_invalid

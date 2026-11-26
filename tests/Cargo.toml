@@ -1,0 +1,30 @@
+[package]
+name = "milestone-tests"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+chrono.workspace = true
+milestone-adversarial = { path = "../crates/milestone-adversarial" }
+milestone-core = { path = "../crates/milestone-core" }
+milestone-lint = { path = "../crates/milestone-lint" }
+milestone-parser = { path = "../crates/milestone-parser" }
+milestone-resolver = { path = "../crates/milestone-resolver" }
+proptest.workspace = true
+rust_decimal.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+
+[[test]]
+name = "properties"
+path = "properties/main.rs"
+
+[[test]]
+name = "adversarial"
+path = "adversarial/main.rs"
+
+[[test]]
+name = "regression"
+path = "regression/main.rs"

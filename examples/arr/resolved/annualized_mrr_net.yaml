@@ -1,0 +1,69 @@
+schema_version: "1.0"
+id: acme-arr-annualized-mrr
+title: Will Acme reach $1M annualized MRR (net of discounts, parent entity) by June 30, 2027?
+subject:
+  name: Acme Corp
+  type: company
+  jurisdiction: US
+  entity_scope: parent_entity_only
+  identifiers:
+    domain: acme.example
+predicate:
+  metric: annual_recurring_revenue
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "1000000"
+      currency: USD
+  class_policy:
+    class: arr
+    measurement_basis: annualized_mrr
+    include_services_revenue: false
+    include_one_time_fees: false
+    usage_based_treatment: annualized_trailing_30_days
+    discount_treatment: net_of_discounts
+    churn_treatment: exclude_already_churned_only
+    signed_not_started_treatment: exclude_until_start_date
+    subsidiary_scope: parent_entity_only
+observation:
+  start: "2026-07-01T00:00:00Z"
+  deadline: "2027-06-30T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: federal_reserve_h10
+  fx_timestamp_rule: deadline_close
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: Audited Billing Ledger
+    source_type: audited_financials
+    independent_of_subject: true
+    verification_method: Read-only Stripe/NetSuite auditor export
+  fallback_sources:
+    - name: Regulatory Financial Filing
+      source_type: sec_or_regulatory_filing
+      independent_of_subject: true
+      verification_method: Filed financial schedule
+  precedence_order:
+    - audited_financials
+    - sec_or_regulatory_filing
+    - company_attestation
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2027-07-15T23:59:59Z"
+  restatement_window_days: 15
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: Audited annualized MRR reaches >= $1,000,000 USD on or before deadline.
+  no_condition_summary: Audited annualized MRR remains < $1,000,000 USD through deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no

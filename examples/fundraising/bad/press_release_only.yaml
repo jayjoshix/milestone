@@ -1,0 +1,48 @@
+schema_version: "1.0"
+id: acme-raise-press-only
+title: Will Acme raise $5M (confirmed by press release) by Dec 31, 2027?
+subject:
+  name: Acme
+  type: company
+  identifiers:
+    domain: acme.example
+predicate:
+  metric: fundraising_total
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "5000000"
+      currency: USD
+  class_policy:
+    class: fundraising
+    completion_event: legal_close_and_funds_received
+    allowed_instruments:
+      - priced_equity
+    include_secondary: false
+    include_insider_capital: false
+    include_existing_note_conversion: false
+    tranche_policy: count_only_funded_tranches
+    conditional_commitment_policy: exclude_conditional
+    unwind_policy: must_remain_closed_through_finalization
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+evidence_policy:
+  primary_source:
+    name: Company Press Release
+    source_type: press_release
+    independent_of_subject: false
+    verification_method: Official company blog
+  conflict_policy: unresolved_on_conflict
+revision_policy:
+  corrections_until: "2028-01-15T23:59:59Z"
+  restatement_handling: apply_restatements_within_window
+invalidation_policy:
+  cancellation_policy: resolve_no

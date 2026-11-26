@@ -1,0 +1,71 @@
+schema_version: "1.0"
+id: acme-raise-equity-plus-safe
+title: Will Acme receive >= $5M in primary priced equity or funded SAFEs by Dec 31, 2027?
+subject:
+  name: Acme Corp
+  type: company
+  jurisdiction: US
+  entity_scope: parent_entity_only
+  identifiers:
+    domain: acme.example
+predicate:
+  metric: fundraising_total
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "5000000"
+      currency: USD
+  class_policy:
+    class: fundraising
+    completion_event: funds_received_in_bank
+    allowed_instruments:
+      - priced_equity
+      - safe
+    include_secondary: false
+    include_insider_capital: true
+    include_existing_note_conversion: false
+    tranche_policy: count_only_funded_tranches
+    conditional_commitment_policy: exclude_conditional
+    unwind_policy: must_remain_closed_through_finalization
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: federal_reserve_h10
+  fx_timestamp_rule: transaction_date_spot
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: Bank Wire Confirmation
+    source_type: bank_or_escrow_confirmation
+    independent_of_subject: true
+    verification_method: Audited bank wire statements
+  fallback_sources:
+    - name: Cap Table Registry
+      source_type: cap_table_registry
+      independent_of_subject: true
+      verification_method: Carta signed ledger
+  precedence_order:
+    - bank_or_escrow_confirmation
+    - cap_table_registry
+    - sec_or_regulatory_filing
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-14T23:59:59Z"
+  restatement_window_days: 14
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: Cleared cash from primary priced equity and new SAFEs >= $5M USD by deadline.
+  no_condition_summary: Cleared cash from qualifying instruments < $5M USD by deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no

@@ -1,0 +1,59 @@
+schema_version: "1.0"
+id: alice-youtube-momentary-resolved
+title: Will channel UC_ALICE_EXAMPLE_01 reach >= 1,000,000 YouTube subscribers at any moment on or before Dec 31, 2027?
+subject:
+  name: Alice Channel
+  type: channel
+  identifiers:
+    youtube_channel_id: UC_ALICE_EXAMPLE_01
+predicate:
+  metric: audience_count
+  comparator: ">="
+  threshold:
+    kind: count
+    value: 1000000
+  class_policy:
+    class: audience
+    platform: youtube
+    channel_scope: single_named_channel_id
+    crossing_rule: momentary_crossing
+    count_source_mode: official_api_exact_or_public_tier
+    bot_purge_policy: raw_snapshot_at_observation
+    deleted_or_suspended_channel_policy: resolves_invalid
+    migrated_channel_policy: follow_verified_official_migration
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+evidence_policy:
+  primary_source:
+    name: YouTube Data API v3
+    source_type: official_platform_api
+    independent_of_subject: true
+    verification_method: Official channels.list subscriberCount polling logs
+  fallback_sources:
+    - name: Public Channel Page Capture
+      source_type: public_web_page
+      independent_of_subject: true
+      verification_method: Archived public channel snapshot
+  precedence_order:
+    - official_platform_api
+    - public_web_page
+    - third_party_media
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-03T23:59:59Z"
+  restatement_window_days: 3
+  restatement_handling: ignore_post_deadline_restatements
+invalidation_policy:
+  yes_condition_summary: Official YouTube Data API records >= 1,000,000 subscribers at any timestamp inside window.
+  no_condition_summary: Official YouTube Data API never reaches 1,000,000 prior to deadline.
+  invalid_triggers:
+    - platform_discontinued_metric
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_invalid

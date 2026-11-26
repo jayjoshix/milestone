@@ -1,0 +1,12 @@
+[package]
+name = "milestone-parser"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+milestone-core = { path = "../milestone-core" }
+rust_decimal.workspace = true
+serde.workspace = true
+thiserror.workspace = true

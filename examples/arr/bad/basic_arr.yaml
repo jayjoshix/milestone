@@ -1,0 +1,41 @@
+schema_version: "1.0"
+id: acme-arr-basic
+title: Will Acme reach $1M ARR by June 30, 2027?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: annual_recurring_revenue
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "1000000"
+      currency: USD
+  class_policy:
+    class: arr
+    measurement_basis: null
+    include_services_revenue: null
+    include_one_time_fees: null
+    usage_based_treatment: null
+    discount_treatment: null
+    churn_treatment: null
+    signed_not_started_treatment: null
+    subsidiary_scope: null
+observation:
+  deadline: "2027-06-30T23:59:59Z"
+  timezone: null
+  deadline_inclusivity: null
+  observation_mode: null
+currency_policy: null
+evidence_policy:
+  primary_source: null
+  fallback_sources: []
+  precedence_order: []
+  conflict_policy: null
+revision_policy:
+  corrections_until: null
+  restatement_handling: null
+invalidation_policy:
+  invalid_triggers: []
+  cancellation_policy: null

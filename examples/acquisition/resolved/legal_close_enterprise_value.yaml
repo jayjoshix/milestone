@@ -1,0 +1,73 @@
+schema_version: "1.0"
+id: acme-acquired-legal-close-ev
+title: Will Acme close an acquisition at >= $100M enterprise value (ex-earnout) by Dec 31, 2027?
+subject:
+  name: Acme Corp
+  type: company
+  jurisdiction: US
+  entity_scope: consolidated_group_with_subsidiaries
+  identifiers:
+    domain: acme.example
+    delaware_file_number: "7482910"
+predicate:
+  metric: acquisition_valuation
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "100000000"
+      currency: USD
+  class_policy:
+    class: acquisition
+    completion_event: legal_close
+    valuation_basis: enterprise_value
+    consideration_types:
+      - cash
+      - public_stock
+    earn_out_treatment: exclude_contingent_earn_outs
+    transaction_structures:
+      - whole_company_merger_or_acquisition
+      - substantially_all_assets
+    termination_after_announcement_policy: resolves_no_if_terminated_before_close
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: transaction_date_spot
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: SEC Merger Closing Filing / Certificate of Merger
+    source_type: sec_or_regulatory_filing
+    independent_of_subject: true
+    verification_method: Delaware Certificate of Merger + acquirer 8-K
+  fallback_sources:
+    - name: Audited Closing Statement
+      source_type: audited_financials
+      independent_of_subject: true
+      verification_method: Independent closing balance sheet
+  precedence_order:
+    - sec_or_regulatory_filing
+    - audited_financials
+    - press_release
+    - third_party_media
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-31T23:59:59Z"
+  restatement_window_days: 31
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: Legal close of whole-company merger or substantially all assets at >= $100M USD EV (cash + public stock, ex-earnouts) on or before deadline.
+  no_condition_summary: No qualifying acquisition legally closes at >= $100M USD EV by deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no

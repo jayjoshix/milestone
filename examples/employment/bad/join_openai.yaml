@@ -1,0 +1,33 @@
+schema_version: "1.0"
+id: alice-join-openai-basic
+title: Will Alice join OpenAI before December 31, 2027?
+subject:
+  name: Alice
+  type: person
+predicate:
+  metric: employment_status
+  comparator: achieved
+  threshold:
+    kind: boolean
+    value: true
+  class_policy:
+    class: employment
+    target_employer: OpenAI
+    target_employer_scope: null
+    qualifying_event: null
+    allowed_relationships: null
+    acquisition_treatment: null
+    leave_of_absence_treatment: null
+    announced_never_started_policy: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: null
+  deadline_inclusivity: null
+  observation_mode: null
+evidence_policy:
+  primary_source: null
+  conflict_policy: null
+revision_policy:
+  restatement_handling: null
+invalidation_policy:
+  cancellation_policy: null

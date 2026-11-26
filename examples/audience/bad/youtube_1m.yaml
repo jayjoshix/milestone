@@ -1,0 +1,33 @@
+schema_version: "1.0"
+id: alice-youtube-1m-basic
+title: Will Alice reach 1,000,000 YouTube subscribers by December 31, 2027?
+subject:
+  name: Alice
+  type: channel
+predicate:
+  metric: audience_count
+  comparator: ">="
+  threshold:
+    kind: count
+    value: 1000000
+  class_policy:
+    class: audience
+    platform: youtube
+    channel_scope: null
+    crossing_rule: null
+    count_source_mode: null
+    bot_purge_policy: null
+    deleted_or_suspended_channel_policy: null
+    migrated_channel_policy: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: null
+  deadline_inclusivity: null
+  observation_mode: null
+evidence_policy:
+  primary_source: null
+  conflict_policy: null
+revision_policy:
+  restatement_handling: null
+invalidation_policy:
+  cancellation_policy: null

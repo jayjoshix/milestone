@@ -1,0 +1,27 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/milestone-core",
+    "crates/milestone-parser",
+    "crates/milestone-lint",
+    "crates/milestone-resolver",
+    "crates/milestone-adversarial",
+    "crates/milestone-cli",
+    "tests",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "~4.5.20", features = ["derive"] }
+proptest = "~1.5.0"
+rust_decimal = { version = "1.36", features = ["serde-with-str"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+thiserror = "1.0"
+tiny-keccak = { version = "2.0", features = ["keccak"] }

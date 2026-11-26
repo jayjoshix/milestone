@@ -1,0 +1,61 @@
+schema_version: "1.0"
+id: alice-join-openai-fte-start
+title: Will Alice commence full-time employment at OpenAI on or before Dec 31, 2027?
+subject:
+  name: Alice Example
+  type: person
+  identifiers:
+    linkedin: https://linkedin.com/in/alice-example
+    orcid: 0000-0000-0000-0001
+predicate:
+  metric: employment_status
+  comparator: achieved
+  threshold:
+    kind: boolean
+    value: true
+  class_policy:
+    class: employment
+    target_employer: OpenAI
+    target_employer_scope: named_entity_and_wholly_owned_subsidiaries
+    qualifying_event: official_start_date
+    allowed_relationships:
+      - full_time_employee
+    acquisition_treatment: does_not_count_unless_new_employment_agreement
+    leave_of_absence_treatment: requires_active_working_day
+    announced_never_started_policy: does_not_resolve_yes_without_actual_start
+observation:
+  start: "2027-01-01T00:00:00Z"
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+  cutoff_precision: exact_second_utc
+evidence_policy:
+  primary_source:
+    name: OpenAI HR / Workday Employment Verification
+    source_type: sec_or_regulatory_filing
+    independent_of_subject: true
+    verification_method: Official HR employment confirmation or regulatory filing
+  fallback_sources:
+    - name: OpenAI Official Press Release
+      source_type: press_release
+      independent_of_subject: true
+      verification_method: Signed newsroom announcement
+  precedence_order:
+    - sec_or_regulatory_filing
+    - press_release
+    - third_party_media
+  conflict_policy: use_highest_precedence_source
+  availability_policy: fallback_to_secondary_in_precedence_order
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2028-01-15T23:59:59Z"
+  restatement_window_days: 15
+  restatement_handling: apply_restatements_within_window
+  retroactive_unwind_handling: reverses_outcome_if_within_window
+invalidation_policy:
+  yes_condition_summary: Alice completes an active full-time employee start day at OpenAI or wholly owned subsidiary on or before 2027-12-31T23:59:59Z.
+  no_condition_summary: Alice does not commence active full-time employment (including if offer is rescinded or advisor-only) by deadline.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no

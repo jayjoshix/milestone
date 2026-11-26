@@ -1,0 +1,12 @@
+[package]
+name = "milestone-adversarial"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+milestone-core = { path = "../milestone-core" }
+milestone-resolver = { path = "../milestone-resolver" }
+rust_decimal.workspace = true
+serde.workspace = true

@@ -1,0 +1,20 @@
+spec_id: acme-arr-contracted-audited
+evaluation_time: "2027-07-05T12:00:00Z"
+items:
+  - id: cpa-audit-2027q2
+    source: Independent CPA ARR Audit Report
+    source_type: audited_financials
+    publication_time: "2027-07-03T18:00:00Z"
+    observation_time: "2027-06-30T23:59:59Z"
+    retrieval_time: "2027-07-04T09:00:00Z"
+    value:
+      kind: money
+      amount: "1000000.01"
+      currency: USD
+    content_hash: "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    metadata:
+      arr_basis: contracted_recurring_revenue
+      includes_services: false
+      includes_one_time_fees: false
+      includes_signed_not_started: false
+      net_of_discounts: true

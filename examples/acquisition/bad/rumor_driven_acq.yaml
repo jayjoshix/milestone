@@ -1,0 +1,45 @@
+schema_version: "1.0"
+id: acme-acquired-rumor
+title: Will Acme be acquired for >= $100M (conflicting press vs filing)?
+subject:
+  name: Acme
+  type: company
+predicate:
+  metric: acquisition_valuation
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "100000000"
+      currency: USD
+  class_policy:
+    class: acquisition
+    completion_event: public_announcement
+    valuation_basis: headline_consideration
+    consideration_types:
+      - cash
+      - public_stock
+    earn_out_treatment: include_maximum_earn_out
+    transaction_structures:
+      - whole_company_merger_or_acquisition
+    termination_after_announcement_policy: null
+observation:
+  deadline: "2027-12-31T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: anytime_on_or_before_deadline
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+evidence_policy:
+  primary_source:
+    name: Financial Press Report
+    source_type: third_party_media
+    independent_of_subject: true
+    verification_method: Published article
+  conflict_policy: null
+revision_policy:
+  restatement_handling: null
+invalidation_policy:
+  cancellation_policy: null

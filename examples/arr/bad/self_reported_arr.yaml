@@ -1,0 +1,60 @@
+schema_version: "1.0"
+id: acme-arr-self-reported
+title: Will Acme reach $1M ARR by June 30, 2027 (founder attestation)?
+subject:
+  name: Acme
+  type: company
+  identifiers:
+    domain: acme.example
+predicate:
+  metric: annual_recurring_revenue
+  comparator: ">="
+  threshold:
+    kind: money
+    value:
+      amount: "1000000"
+      currency: USD
+  class_policy:
+    class: arr
+    measurement_basis: contracted_recurring_revenue
+    include_services_revenue: false
+    include_one_time_fees: false
+    usage_based_treatment: excluded
+    discount_treatment: net_of_discounts
+    churn_treatment: exclude_churned_and_noticed
+    signed_not_started_treatment: exclude_until_start_date
+    subsidiary_scope: parent_entity_only
+observation:
+  start: "2026-01-01T00:00:00Z"
+  deadline: "2027-06-30T23:59:59Z"
+  timezone: UTC
+  deadline_inclusivity: inclusive
+  observation_mode: point_in_time_at_deadline
+  cutoff_precision: exact_second_utc
+currency_policy:
+  reporting_currency: USD
+  fx_source: ecb_daily_reference
+  fx_timestamp_rule: deadline_close
+  allow_non_reporting_currency: true
+evidence_policy:
+  primary_source:
+    name: CEO Self-Attestation Blog Post
+    source_type: company_attestation
+    independent_of_subject: false
+    verification_method: Signed founder statement
+  fallback_sources: []
+  precedence_order:
+    - company_attestation
+  conflict_policy: unresolved_on_conflict
+  availability_policy: return_unresolved_if_unavailable
+  minimum_corroboration: 1
+revision_policy:
+  corrections_until: "2027-07-30T23:59:59Z"
+  restatement_window_days: 30
+  restatement_handling: apply_restatements_within_window
+invalidation_policy:
+  yes_condition_summary: Self-reported ARR >= $1M USD.
+  no_condition_summary: Self-reported ARR < $1M USD.
+  invalid_triggers:
+    - source_unavailable_past_grace_period
+  cancellation_policy: resolve_no
